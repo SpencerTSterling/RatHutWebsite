@@ -75,7 +75,8 @@ namespace RatHutWebsite
             IdentityHelper.CreateRoles(serviceProvider.ServiceProvider,
                                        IdentityHelper.Administrator,
                                        IdentityHelper.Customer).Wait();
-
+            // default administrator
+            IdentityHelper.CreateDefaultAdministrator(serviceProvider.ServiceProvider).Wait();
         }
     }
 }

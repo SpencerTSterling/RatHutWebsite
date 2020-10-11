@@ -54,5 +54,27 @@ namespace RatHutWebsite.Models
                 }
             }
         }
+
+        public static async Task CreateDefaultAdministrator(IServiceProvider provider)
+        {
+            const string email = "administrator@rathut.com";
+            const string username = "administrator";
+            const string password = "password";
+
+            var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
+
+            if (userManager.Users.Count() == 0)
+            {
+                IdentityUser administrator = new IdentityUser()
+                {
+                    Email = email,
+                    UserName = username
+                };
+
+                // creating the administrator
+                await userManager.CreateAsync(administrator, password);
+                await userManager.AddToRoleAsync(administrator, Administrator);
+            }
+        }
     }
 }
