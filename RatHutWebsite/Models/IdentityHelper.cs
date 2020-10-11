@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,10 @@ namespace RatHutWebsite.Models
 {
     public class IdentityHelper
     {
+        // roles
+        public const string Administrator = "administrator";
+        public const string Customer = "customer";
+
         /// <summary>
         /// Options for Identity are set
         /// </summary>
@@ -28,6 +33,26 @@ namespace RatHutWebsite.Models
             // lockout options
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
             options.Lockout.MaxFailedAccessAttempts = 5;
+        }
+
+        /// <summary>
+        /// Creates roles if passed in as strings
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="roles"></param>
+        /// <returns></returns>
+        public static async Task CreateRoles(IServiceProvider provider, params string[] roles)
+        {
+            RoleManager<IdentityRole> roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            foreach ( string role in roles)
+            {
+                bool doesRoleExist = await roleManager.RoleExistsAsync(role);
+                if ( !doesRoleExist)
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
         }
     }
 }
