@@ -13,12 +13,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using RatHutWebsite.Models;
 
 namespace RatHutWebsite.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
+        private const string AdminEmail = "@rathut.com";
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
@@ -83,6 +85,24 @@ namespace RatHutWebsite.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    // Add roles here
+                    if (user.Email.ToLower().EndsWith(AdminEmail))
+                    {
+                        var roleResult = await _userManager.AddToRoleAsync(user, IdentityHelper.Administrator);
+                        if (!roleResult.Succeeded)
+                        {
+                            _logger.LogInformation($"{user.UserName} not added to {IdentityHelper.Administrator} role");
+                        }
+                    }
+                    else
+                    {
+                        var roleResult = await _userManager.AddToRoleAsync(user, IdentityHelper.Customer);
+                        if (!roleResult.Succeeded)
+                        {
+                            _logger.LogInformation($"{user.UserName} not added to {IdentityHelper.Customer} role");
+                        }
+                    }
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
