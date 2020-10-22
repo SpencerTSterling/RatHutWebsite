@@ -19,8 +19,10 @@ namespace RatHutWebsite.Models
 
         public string Category { get; set; }
 
+        [Display(Name = "Vegan")]
         public Boolean IsVegan { get; set; }
 
+        [Display(Name = "Vegetarian")]
         public Boolean IsVegetarian { get; set; }
     }
 }
