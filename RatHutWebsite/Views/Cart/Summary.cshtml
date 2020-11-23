@@ -1,0 +1,50 @@
+﻿@model IEnumerable<RatHutWebsite.Models.Product>
+
+@{
+    ViewData["Title"] = "Summary";
+}
+
+<h1>Summary</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsVegan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsVegetarian)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsVegan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsVegetarian)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
