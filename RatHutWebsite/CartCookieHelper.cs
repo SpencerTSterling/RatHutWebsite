@@ -41,5 +41,10 @@ namespace RatHutWebsite
 
             http.HttpContext.Response.Cookies.Append(CartCookie, data, options);
         }
+
+        public static void EmptyCart(IHttpContextAccessor http)
+        {
+            http.HttpContext.Response.Cookies.Delete(CartCookie);
+        }
     }
 }
