@@ -15,5 +15,8 @@ namespace RatHutWebsite.Data
         }
         // DbSet for products - menu items 
         public DbSet<Product> Products { get; set; }
+
+        // DbSet for orders
+        public DbSet<Order> Orders { get; set; }
     }
 }
