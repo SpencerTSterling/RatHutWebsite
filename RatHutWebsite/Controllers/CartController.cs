@@ -34,12 +34,34 @@ namespace RatHutWebsite.Controllers
             return Redirect(prevUrl);
         }
 
+        public async Task<IActionResult> Delete(int id, string prevUrl)
+        {
+            // get product from database
+            Product p = await _context.Products.FirstOrDefaultAsync(m => m.ProductId == id);
+
+            List<Product> cartProducts = CartCookieHelper.GetCartProducts(_httpContext);
+            CartCookieHelper.RemoveProductFromCart(_httpContext, id);
+
+            List<Product> updatedCartProducts = CartCookieHelper.GetCartProducts(_httpContext);
+
+            // redirect back to previous page
+            return Redirect(prevUrl);
+        }
+
         public IActionResult Summary()
         {
             List<Product> cartProducts =
                 CartCookieHelper.GetCartProducts(_httpContext);
 
             return View(cartProducts);
+        }
+
+        public IActionResult ClearCart(string prevUrl)
+        {
+            // clear all items from the cart (delete the cookie)
+            CartCookieHelper.EmptyCart(_httpContext);
+
+            return Redirect(prevUrl);
         }
     }
 }

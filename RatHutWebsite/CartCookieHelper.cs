@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
+using RatHutWebsite.Data;
 using RatHutWebsite.Models;
 using System;
 using System.Collections.Generic;
@@ -8,9 +10,15 @@ using System.Threading.Tasks;
 
 namespace RatHutWebsite
 {
-    public static class CartCookieHelper
+    public class CartCookieHelper
     {
+
         const string CartCookie = "ShoppingCartCookie";
+        /// <summary>
+        /// Gets all the items in the cart
+        /// </summary>
+        /// <param name="http"></param>
+        /// <returns></returns>
         public static List<Product> GetCartProducts(IHttpContextAccessor http)
         {
             // Get existing cart items
@@ -26,6 +34,11 @@ namespace RatHutWebsite
             return cartProducts;
         }
 
+        /// <summary>
+        /// Adds an item to the cart
+        /// </summary>
+        /// <param name="http"></param>
+        /// <param name="p"></param>
         public static void AddProductToCart(IHttpContextAccessor http, Product p)
         {
             List<Product> cartProducts = GetCartProducts(http);
@@ -45,6 +58,47 @@ namespace RatHutWebsite
         public static void EmptyCart(IHttpContextAccessor http)
         {
             http.HttpContext.Response.Cookies.Delete(CartCookie);
+        }
+
+        /// <summary>
+        /// Removes an item from the cart
+        /// </summary>
+        /// <param name="http"></param>
+        /// <param name="id"></param>
+        public static void RemoveProductFromCart(IHttpContextAccessor http, int id)
+        {
+            List<Product> cartProducts = GetCartProducts(http);
+
+            // the product to be removed
+            Product product = cartProducts.Find(p => p.ProductId == id);
+
+            cartProducts.Remove(product);
+            // Remove product from cart cookie
+
+            string data = JsonConvert.SerializeObject(cartProducts);
+            CookieOptions options = new CookieOptions()
+            {
+                Expires = DateTime.Now.AddYears(1),
+                Secure = true,
+                IsEssential = true
+            };
+            http.HttpContext.Response.Cookies.Append(CartCookie, data, options);
+        }
+
+        public static decimal GetCartTotal(IHttpContextAccessor http)
+        {
+            List<Product> cartProducts = GetCartProducts(http);
+
+            decimal total = 0;
+
+            // sum up the price of all the products
+            foreach (Product cartProduct in cartProducts)
+            {
+                total = total + cartProduct.Price;
+            }
+
+            // return the total
+            return total;
         }
     }
 }
