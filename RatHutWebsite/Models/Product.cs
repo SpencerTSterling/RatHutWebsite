@@ -24,5 +24,9 @@ namespace RatHutWebsite.Models
 
         [Display(Name = "Vegetarian")]
         public Boolean IsVegetarian { get; set; }
+
+        public decimal Price { get; set; }
+
+        public string ImageURL { get; set; }
     }
 }
