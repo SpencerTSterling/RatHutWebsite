@@ -56,7 +56,7 @@ namespace RatHutWebsite.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Title,Description,Category,IsVegan,IsVegetarian")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,Title,Description,Category,IsVegan,IsVegetarian,Price,ImageURL")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace RatHutWebsite.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Title,Description,Category,IsVegan,IsVegetarian")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Title,Description,Category,IsVegan,IsVegetarian,Price,ImageURL")] Product product)
         {
             if (id != product.ProductId)
             {
